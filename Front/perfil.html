@@ -19,7 +19,7 @@
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 450px;
+      width: 400px;
     }
     h1 {
       color: #0d6efd;
@@ -28,9 +28,6 @@
     }
     .btn {
       margin-top: 10px;
-    }
-    .section {
-      margin-top: 30px;
     }
     .msg {
       text-align: center;
@@ -41,24 +38,15 @@
 <body>
   <div class="container">
     <h1>Perfil do Usuário</h1>
-    <p><strong>ID:</strong> <span id="userId">Carregando...</span></p>
-    <p><strong>Email:</strong> <span id="userEmail">Carregando...</span></p>
+    
+    <p><strong>Email:</strong> <span id="userEmail">getElementById: userEmail</span></p>
 
-    <div class="section">
-      <h5>Atualizar Senha</h5>
-      <input type="password" id="novaSenha" class="form-control" placeholder="Nova Senha" />
-      <button class="btn btn-warning w-100" id="btnAtualizarSenha">Atualizar Senha</button>
-    </div>
+    <h5 class="mt-4">Atualizar Senha</h5>
+    <input type="password" id="novaSenha" class="form-control" placeholder="Nova Senha" />
+    <button class="btn btn-warning w-100" id="btnAtualizarSenha">Atualizar Senha</button>
 
-    <div class="section">
-      <h5>Consumo de Água</h5>
-      <p><strong>Último mês:</strong> <span id="consumoAgua">Carregando...</span></p>
-    </div>
-
-    <div class="section">
-      <button class="btn btn-danger w-100" id="btnExcluirConta">Excluir Conta</button>
-      <button class="btn btn-secondary w-100" id="logout">Sair</button>
-    </div>
+    <button class="btn btn-danger w-100 mt-4" id="btnExcluirConta">Excluir Conta</button>
+    <button class="btn btn-secondary w-100" id="logout">Sair</button>
 
     <p class="msg" id="mensagem"></p>
   </div>
@@ -68,24 +56,9 @@
     const userId = JSON.parse(localStorage.getItem('id'));
     const mensagem = document.getElementById('mensagem');
 
-    if (!token || !userId) {
-      window.location.href = 'perfil.html';
-    } else {
-      fetch(`http://localhost:3000/auth/usuario/${userId}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('userId').textContent = data.id || 'N/A';
-        document.getElementById('userEmail').textContent = data.email || 'N/A';
-        // Simulando consumo de água
-        document.getElementById('consumoAgua').textContent = data.consumoAgua || '1200 L';
-      })
-      .catch(() => {
-        alert('Erro ao carregar dados do usuário.');
-        window.location.href = 'perfil.html';
-      });
-    }
+
+    
+      
 
     document.getElementById('btnAtualizarSenha').addEventListener('click', async () => {
       const novaSenha = document.getElementById('novaSenha').value.trim();
@@ -127,7 +100,7 @@
         if (resposta.ok) {
           localStorage.clear();
           alert(resultado.mensagem || 'Conta excluída com sucesso.');
-          window.location.href = 'perfil.html';
+          window.location.href = 'login.html';
         } else {
           mensagem.style.color = 'red';
           mensagem.textContent = resultado.mensagem || 'Erro ao excluir conta.';
@@ -140,7 +113,7 @@
 
     document.getElementById('logout').addEventListener('click', () => {
       localStorage.clear();
-      window.location.href = 'perfil.html';
+      window.location.href = 'login.html';
     });
   </script>
 </body>

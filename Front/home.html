@@ -490,13 +490,14 @@
             <h1>AquAlert</h1>
         </div>
         <nav>
-            <a href="#inicio">Início</a>
-            <a href="#uso-racional">Uso Racional</a>
-            <a href="#estatisticas">Estatísticas</a>
-            <a href="#junte-se">Junte-se</a>
-            <a href="cadastro.html" class="cta-cadastro">Cadastrar</a>
-            <a href="perfil.html" class="cta-cadastro">Conta</a>
-        </nav>
+    <a href="#inicio">Início</a>
+    <a href="#uso-racional">Uso Racional</a>
+    <a href="#estatisticas">Estatísticas</a>
+    <a href="#junte-se">Junte-se</a>
+    <a href="perfil.html" id="btnConta" class="cta-cadastro" style="display: none;">Conta</a>
+    <a href="cadastro.html" class="cta-cadastro">Cadastrar</a>
+</nav>
+
     </header>
     
     <main>
@@ -604,5 +605,16 @@
             <p>Rua da Água, 121, São Paulo, SP</p>
         </div>
     </footer>
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            document.getElementById('btnConta').style.display = 'inline-block';
+        }
+    })
+
+</script>
+
+
 </body>
 </html>

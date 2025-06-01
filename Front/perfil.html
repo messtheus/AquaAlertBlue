@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Perfil - AquAlert</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  
   <style>
     body {
       background-color: #e0f7fa;
@@ -39,7 +40,8 @@
   <div class="container">
     <h1>Perfil do Usuário</h1>
     
-    <p><strong>Email:</strong> <span id="userEmail">getElementById: userEmail</span></p>
+   <p><strong>Nome:</strong> <span id="nome"></span></p>
+
 
     <h5 class="mt-4">Atualizar Senha</h5>
     <input type="password" id="novaSenha" class="form-control" placeholder="Nova Senha" />
@@ -52,10 +54,15 @@
   </div>
 
   <script>
-    const token = localStorage.getItem('token');
-    const userId = JSON.parse(localStorage.getItem('id'));
-    const mensagem = document.getElementById('mensagem');
+    if (resultado.usuario) {
+  localStorage.setItem('id', JSON.stringify(resultado.usuario.id));
+  localStorage.setItem('nome', JSON.stringify(resultado.usuario.nome));
+  localStorage.setItem('email', JSON.stringify(resultado.usuario.email));
+  localStorage.setItem("usuarioLogado", "true");
+}
 
+
+document.getElementById('nome').textContent = userNome || 'nome';
 
     
       
@@ -115,6 +122,8 @@
       localStorage.clear();
       window.location.href = 'login.html';
     });
+    localStorage.setItem('nome', JSON.stringify(usuario.nome));
+    localStorage.setItem('email', JSON.stringify(usuario.email));
   </script>
 </body>
 </html>

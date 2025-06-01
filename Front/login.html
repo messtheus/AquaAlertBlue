@@ -118,9 +118,13 @@ if (resposta.ok) {
     localStorage.setItem('token', resultado.token);
     if (resultado.id) {
       localStorage.setItem('id', JSON.stringify(resultado.id));
+      localStorage.setItem('nome', resultado.nome || 'Usuário');
+      localStorage.setItem('email', resultado.email || email);
+      localStorage.setItem("usuarioLogado", "true");
+
     }
     setTimeout(() => {
-      window.location.href = 'perfil.html';
+      window.location.href = 'home.html';
     }, 1500);
   }
 } else {

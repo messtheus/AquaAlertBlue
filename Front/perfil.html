@@ -54,76 +54,75 @@
   </div>
 
   <script>
-    if (resultado.usuario) {
-  localStorage.setItem('id', JSON.stringify(resultado.usuario.id));
-  localStorage.setItem('nome', JSON.stringify(resultado.usuario.nome));
-  localStorage.setItem('email', JSON.stringify(resultado.usuario.email));
-  localStorage.setItem("usuarioLogado", "true");
-}
+  // Recupera dados do localStorage
+  const userId = JSON.parse(localStorage.getItem('id'));
+  const userNome = JSON.parse(localStorage.getItem('nome'));
+  const token = localStorage.getItem('token'); // Verifique se o token foi salvo após o login
 
+  // Atualiza o nome na tela
+  document.getElementById('nome').textContent = userNome || 'Nome não encontrado';
 
-document.getElementById('nome').textContent = userNome || 'nome';
+  const mensagem = document.getElementById('mensagem');
 
-    
-      
+  // Atualizar Senha
+  document.getElementById('btnAtualizarSenha').addEventListener('click', async () => {
+    const novaSenha = document.getElementById('novaSenha').value.trim();
+    if (!novaSenha) {
+      mensagem.style.color = 'red';
+      mensagem.textContent = 'Por favor, digite uma nova senha.';
+      return;
+    }
 
-    document.getElementById('btnAtualizarSenha').addEventListener('click', async () => {
-      const novaSenha = document.getElementById('novaSenha').value.trim();
-      if (!novaSenha) {
+    try {
+      const resposta = await fetch(`http://localhost:3000/auth/atualizar-senha/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ senha: novaSenha })
+      });
+
+      const resultado = await resposta.json();
+      mensagem.style.color = resposta.ok ? 'green' : 'red';
+      mensagem.textContent = resultado.mensagem || (resposta.ok ? 'Senha atualizada com sucesso!' : 'Erro ao atualizar senha.');
+    } catch (erro) {
+      mensagem.style.color = 'red';
+      mensagem.textContent = 'Erro ao conectar com o servidor.';
+    }
+  });
+
+  // Excluir Conta
+  document.getElementById('btnExcluirConta').addEventListener('click', async () => {
+    if (!confirm('Tem certeza que deseja excluir sua conta? Essa ação não poderá ser desfeita.')) return;
+
+    try {
+      const resposta = await fetch(`http://localhost:3000/auth/usuario/${userId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const resultado = await resposta.json();
+      if (resposta.ok) {
+        localStorage.clear();
+        alert(resultado.mensagem || 'Conta excluída com sucesso.');
+        window.location.href = 'login.html';
+      } else {
         mensagem.style.color = 'red';
-        mensagem.textContent = 'Por favor, digite uma nova senha.';
-        return;
+        mensagem.textContent = resultado.mensagem || 'Erro ao excluir conta.';
       }
+    } catch (erro) {
+      mensagem.style.color = 'red';
+      mensagem.textContent = 'Erro ao conectar com o servidor.';
+    }
+  });
 
-      try {
-        const resposta = await fetch(`http://localhost:3000/auth/atualizar-senha/${userId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ senha: novaSenha })
-        });
+  // Logout
+  document.getElementById('logout').addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'login.html';
+  });
+</script>
 
-        const resultado = await resposta.json();
-        mensagem.style.color = resposta.ok ? 'green' : 'red';
-        mensagem.textContent = resultado.mensagem || (resposta.ok ? 'Senha atualizada com sucesso!' : 'Erro ao atualizar senha.');
-      } catch {
-        mensagem.style.color = 'red';
-        mensagem.textContent = 'Erro ao conectar com o servidor.';
-      }
-    });
-
-    document.getElementById('btnExcluirConta').addEventListener('click', async () => {
-      if (!confirm('Tem certeza que deseja excluir sua conta? Essa ação não poderá ser desfeita.')) return;
-
-      try {
-        const resposta = await fetch(`http://localhost:3000/auth/usuario/${userId}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        const resultado = await resposta.json();
-        if (resposta.ok) {
-          localStorage.clear();
-          alert(resultado.mensagem || 'Conta excluída com sucesso.');
-          window.location.href = 'login.html';
-        } else {
-          mensagem.style.color = 'red';
-          mensagem.textContent = resultado.mensagem || 'Erro ao excluir conta.';
-        }
-      } catch {
-        mensagem.style.color = 'red';
-        mensagem.textContent = 'Erro ao conectar com o servidor.';
-      }
-    });
-
-    document.getElementById('logout').addEventListener('click', () => {
-      localStorage.clear();
-      window.location.href = 'login.html';
-    });
-    localStorage.setItem('nome', JSON.stringify(usuario.nome));
-    localStorage.setItem('email', JSON.stringify(usuario.email));
-  </script>
 </body>
 </html>

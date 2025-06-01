@@ -109,21 +109,23 @@
           body: JSON.stringify({ email, senha })
         });
 
-        const resultado = await resposta.json();
-        mensagem.style.color = resposta.ok ? 'green' : 'red';
-        mensagem.textContent = resultado.mensagem || 'Erro ao fazer login.';
+       const resultado = await resposta.json();
+mensagem.style.color = resposta.ok ? 'green' : 'red';
 
-        if (resposta.ok) {
-          if (resultado.token) {
-            localStorage.setItem('token', resultado.token);
-            setTimeout(() => {
-              window.location.href = 'home.html'; // ou outra rota protegida
-            }, 1500);
-            if (resultado.id) {
-              localStorage.setItem('id', JSON.stringify(resultado.id));
-            }
-          }
-        }
+if (resposta.ok) {
+  mensagem.textContent = resultado.mensagem || 'Login realizado com sucesso!';
+  if (resultado.token) {
+    localStorage.setItem('token', resultado.token);
+    if (resultado.id) {
+      localStorage.setItem('id', JSON.stringify(resultado.id));
+    }
+    setTimeout(() => {
+      window.location.href = 'perfil.html';
+    }, 1500);
+  }
+} else {
+  mensagem.textContent = resultado.mensagem || 'Erro ao fazer login.';
+}
       } catch (err) {
         mensagem.style.color = 'red';
         mensagem.textContent = 'Erro ao conectar com o servidor.';

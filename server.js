@@ -6,9 +6,22 @@ const PORT = 3001;
 
 app.use(express.static(path.join(__dirname, 'Front')));
 
+app.get('/auth/login/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const usuario = await Usuario.findById(id); 
+    if (!usuario) {
+      return res.status(404).json({ mensagem: 'Usuário não encontrado.' });
+    }
+    res.json({ id: usuario.id, email: usuario.email });
+  } catch (err) {
+    res.status(500).json({ mensagem: 'Erro ao buscar usuário.' });
+  }
+});
+
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Front', 'login.html'));
+  res.sendFile(path.join(__dirname, 'Front', 'home.html'));
 });
 
 
